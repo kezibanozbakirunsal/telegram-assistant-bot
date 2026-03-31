@@ -1,13 +1,14 @@
 {
   "name": "telegram-assistant-bot",
   "version": "1.0.0",
-  "description": "Telegram bot with Gmail and Google Calendar access via Claude",
+  "description": "Telegram bot with Gmail and Google Calendar access",
   "main": "bot.js",
   "scripts": {
     "start": "node bot.js"
   },
   "dependencies": {
-    "node-telegram-bot-api": "^0.66.0"
+    "node-telegram-bot-api": "^0.66.0",
+    "googleapis": "^144.0.0"
   },
   "engines": {
     "node": ">=18.0.0"
