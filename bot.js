@@ -1,6 +1,17 @@
 const TelegramBot = require("node-telegram-bot-api");
+const http = require("http");
 
 const TELEGRAM_TOKEN = process.env.TELEGRAM_TOKEN;
+const PORT = process.env.PORT || 3000;
+
+// Render'ın port kontrolü için basit HTTP server
+const server = http.createServer((req, res) => {
+  res.writeHead(200, { "Content-Type": "text/plain" });
+  res.end("Bot is running!");
+});
+server.listen(PORT, () => {
+  console.log(`HTTP server listening on port ${PORT}`);
+});
 const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY;
 const ALLOWED_USER_ID = process.env.ALLOWED_USER_ID; // Güvenlik için sadece sen kullanabilirsin
 
