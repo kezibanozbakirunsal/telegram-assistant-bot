@@ -8,7 +8,7 @@ const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY;
 const ALLOWED_USER_ID = process.env.ALLOWED_USER_ID;
 const GOOGLE_CLIENT_ID = process.env.GOOGLE_CLIENT_ID;
 const GOOGLE_CLIENT_SECRET = process.env.GOOGLE_CLIENT_SECRET;
-const REDIRECT_URI = process.env.REDIRECT_URI || "https://telegram-assistant-bot-4nmx.onrender.com/auth/callback";
+const REDIRECT_URI = "urn:ietf:wg:oauth:2.0:oob";
 const PORT = process.env.PORT || 3000;
 
 const TOKEN_PATH = "/tmp/google_tokens.json";
@@ -194,7 +194,20 @@ bot.on("message", async (msg) => {
 
   if (text === "/auth") {
     const authUrl = getAuthUrl();
-    bot.sendMessage(chatId, `Google hesabını bağlamak için:\n\n${authUrl}`);
+    bot.sendMessage(chatId, `Google hesabını bağlamak için şu linke git:\n\n${authUrl}\n\nSayfada gördüğün kodu /code XXXXX şeklinde gönder.`);
+    return;
+  }
+
+  if (text.startsWith("/code ")) {
+    const code = text.replace("/code ", "").trim();
+    try {
+      const { tokens } = await oauth2Client.getToken(code);
+      oauth2Client.setCredentials(tokens);
+      saveTokens(tokens);
+      bot.sendMessage(chatId, "✅ Google hesabın bağlandı! Artık maillerini ve takvimini sorabilirsin.");
+    } catch (e) {
+      bot.sendMessage(chatId, "❌ Kod hatalı: " + e.message);
+    }
     return;
   }
 
